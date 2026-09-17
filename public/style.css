@@ -1,0 +1,118 @@
+/* General Layout & Colors */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #0052cc; /* Deep blue background covering the bottom view */
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.bank-header {
+  background-color: #ffffff;
+  padding: 15px 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.header-container {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.bank-badge {
+  font-weight: bold;
+  color: #002d72;
+  font-size: 1.1rem;
+}
+
+.bank-badge.sm {
+  font-size: 0.9rem;
+}
+
+.bank-title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #002d72;
+}
+
+/* Main Content Area acting as the white card with a curved bottom wrapper */
+.main-content {
+  flex: 1;
+  background: #ffffff; /* White section on top */
+  border-bottom-left-radius: 50% 30px;
+  border-bottom-right-radius: 50% 30px;
+  padding: 20px;
+  padding-bottom: 60px; /* Space for the curve */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Cards visibility states */
+.card {
+  display: block;
+}
+
+.card.hidden {
+  display: none !important;
+}
+
+/* Form Elements & Inputs */
+.field {
+  margin-bottom: 15px;
+}
+
+.field label {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.field input:focus, .field select:focus {
+  border-color: #0052cc;
+}
+
+/* Primary Button Styling matching the curved theme */
+.primary-btn {
+  width: 100%;
+  background-color: #d3d3d3; /* Light grey disabled/default state as seen in photo */
+  color: #ffffff;
+  border: none;
+  padding: 14px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background-color 0.2s;
+}
+
+.primary-btn:not(:disabled) {
+  background-color: #0052cc; /* Active blue button */
+}
+
+/* Footer styling over the deep blue background */
+.bank-footer {
+  background-color: #0052cc;
+  color: #ffffff;
+  text-align: center;
+  padding: 15px;
+  font-size: 0.8rem;
+  }
